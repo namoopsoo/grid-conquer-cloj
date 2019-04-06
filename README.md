@@ -1,6 +1,8 @@
 
 #### Conquer
+* Given a _grid_ with colors, and a starting position, accumulate (_aka conquer_) some land.
 * Simple case at commit `81ae122`
+
 ```clojure
 (def land
   [["G" "G" "W" "R"]
