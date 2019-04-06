@@ -16,8 +16,14 @@ user=> (print-land land)
 2 [G W R W]
 3 [R W W W]
 (nil nil nil nil)
+```
+* If we start with `"W"`, nothing is returned, because `conquer` only continues what was started.
+```clojure
 user=> (conquer [0 0] land "W" [])
 []
+```
+* But starting with `"G"`, there is opportunity to grow now.
+```clojure
 user=> (conquer [0 0] land "G" [])
 [[0 0] [0 1]]
 user=> 
