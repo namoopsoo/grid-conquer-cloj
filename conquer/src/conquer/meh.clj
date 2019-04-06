@@ -1,3 +1,8 @@
+(ns conquer.meh
+  (:require 
+    [clojure.set :as cljset]
+    )
+  )
 
 (defn sum
    ([vals] (sum vals 0)) 
@@ -23,8 +28,8 @@
   (let [[x y] position]
     ; magic
     (if (< x
-           (- (count land))
-           1)
+           (- (count land) 1)
+           )
       [(+ x 1) y])
     )
   )
@@ -48,33 +53,58 @@
     )
   )
 
+(defn look [position land]
+  (let [[x y] position]
+    ( (land x) y)))
+
 (defn mine [mycolor thiscolor]
   (= mycolor thiscolor))
 
+(defn new? [position memory]
+  (= #{}
+     (cljset/intersection (set position) (set memory))  
+     )
+  )
+
+(defn combine [s1 s2 s3 s4]
+
+  (apply cljset/union
+         (filter #(not (nil? %))
+                 [s1 s2 s3 s4]
+                              )))
+
 (defn conquer
   [position land mycolor memory]
-  (if (nil? position)
 
+  ; Went off grid
+  (if (nil? position)
     memory
 
-    (if (= mycolor (look position land))
+    (if (and (= mycolor (look position land))
+             (new? position memory))
 
       ;
-      (conquer (right position land)
-               land
-               mycolor
+      (let [capture-vec 
+            (map #(conquer (% position land)
+                           land
+                           mycolor
 
-               ;accumulate memory 
-               (conj memory position)
-               )
+                           ;accumulate memory 
+                           (conj memory position)
+                           )
+                 [up down right left])
+
+            ]
+        (println (str "DEBUG ... " ) capture-vec )
+
+        (combine capture-vec)
+        )
+      
       ;
       memory)
 
     ))
 
-(defn look [position land]
-  (let [[x y] position]
-    ( (land x) y)))
 
 
 (defn print-land [land]
